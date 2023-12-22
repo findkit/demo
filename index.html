@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="https://www.findkit.com/wp-content/uploads/2023/08/cropped-findkit-favicon-192x192.png">
+	<title>Findkit UI Demo</title>
+	<style>
+		body {
+			font-family: "Helvetica Neue", sans-serif;
+		}
+
+		.container {
+			max-width: 800px;
+			display: flex;
+			margin: 0 auto;
+		}
+	</style>
+
+	<!-- There's only the search on this page. No need to lazy load. -->
+	<link rel="preload" href="https://cdn.findkit.com/ui/v0.18.2/esm/implementation.js" as="script" />
+	<link rel="preload" href="https://cdn.findkit.com/ui/v0.18.2/styles.css" as="style" />
+
+	<script type="module">
+		// https://docs.findkit.com/ui/setup
+		import {
+			FindkitUI,
+			css,
+			html,
+		} from "https://cdn.findkit.com/ui/v0.18.2/esm/index.js";
+
+
+		const params = new URLSearchParams(window.location.search);
+
+		const publicToken = params.get("publicToken");
+		const container = document.querySelector(".container");
+
+		if (publicToken) {
+			init();
+		} else {
+			container.innerHTML = `
+				<h1>Findkit Demo</h1>
+				<p>
+					Generate <a href="https://docs.findkit.com/ui/">Findkit
+					UI</a> demo by entering the project public token below.
+				</p>
+				<p>
+					<form>
+						<label for="publicToken">Public token</label>
+						<input type="text" name="publicToken" id="publicToken" />
+						<button type="submit">Create</button>
+				</p>
+			`;
+		}
+
+		function init() {
+			const ui = new FindkitUI({
+				publicToken,
+				container,
+
+				minTerms: 0,
+
+				// https://docs.findkit.com/ui/styling
+				css: css`
+					.findkit--container {
+					  --findkit--brand-color: #c828d2;
+					}
+
+					.findkit--magnifying-glass-lightning {
+					  visibility: visible;
+					}
+
+					.findkit--highlight {
+					  color: #727272;
+					}
+
+					.logo {
+					  display: flex;
+					  align-self: center;
+					  margin-top: 1rem;
+					  margin-bottom: 1rem;
+					  width: clamp(10vw, 335px, 70vw);
+					}
+
+					.findkit--header p {
+					  text-align: center;
+					}
+
+					.description {
+					  font-style: italic;
+					  text-align: center;
+					  width: clamp(10vw, 60ch, 80vw);
+					  align-self: center;
+					  margin-top: 1rem;
+					  margin-bottom: 1rem;
+					}
+
+					.description a:hover,
+					.description a:visited {
+					  color: #0000ba;
+					}
+				`,
+
+				// https://docs.findkit.com/ui/slot-overrides/
+				slots: {
+					// https://docs.findkit.com/ui/slot-overrides/slots#header
+					Header(props) {
+						return html`
+							<img src="/findkit.svg" class="logo" />
+							<p class="description">
+								<a href="https://docs.findkit.com/ui/">Findkit UI</a> demo.
+							</p>
+							${props.children}
+						`;
+					},
+				},
+			});
+
+			ui.on("open", () => {
+				setTimeout(() => {
+					ui.container.shadowRoot.querySelector("input").focus();
+				}, 10);
+			});
+		}
+	</script>
+</head>
+
+<body>
+	<div class="container">Loading...</div>
+</body>
+
+</html>
