@@ -34,6 +34,7 @@
 		const params = new URLSearchParams(window.location.search);
 
 		const publicToken = params.get("publicToken");
+		const name = params.get("name");
 		const container = document.querySelector(".container");
 
 		if (publicToken) {
@@ -47,6 +48,8 @@
 				</p>
 				<p>
 					<form>
+						<label for="name">Project Name</label>
+						<input type="text" name="name" id="name" />
 						<label for="publicToken">Public token</label>
 						<input type="text" name="publicToken" id="publicToken" />
 						<button type="submit">Create</button>
@@ -109,7 +112,8 @@
 						return html`
 							<img src="/findkit.svg" class="logo" />
 							<p class="description">
-								<a href="https://docs.findkit.com/ui/">Findkit UI</a> demo.
+								<a href="https://docs.findkit.com/ui/">Findkit UI</a> demo
+								${name ? ` for ${name}` : ""}
 							</p>
 							${props.children}
 						`;
