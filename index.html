@@ -121,10 +121,8 @@
 				},
 			});
 
-			ui.on("open", () => {
-				setTimeout(() => {
-					ui.container.shadowRoot.querySelector("input").focus();
-				}, 10);
+			ui.on("open", (e) => {
+				e.container.shadowRoot.querySelector("input").focus();
 			});
 		}
 	</script>
