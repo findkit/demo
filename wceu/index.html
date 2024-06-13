@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="icon"
+            href="https://www.findkit.com/wp-content/uploads/2023/08/cropped-findkit-favicon-192x192.png"
+        />
+        <title>Findkit UI Demo</title>
+        <style>
+            body {
+                font-family: "Helvetica Neue", sans-serif;
+            }
+
+            .container {
+                max-width: 800px;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+
+        <!-- There's only the search on this page. No need to lazy load. -->
+        <link
+            rel="preload"
+            href="https://cdn.findkit.com/ui/v1.3.1/esm/implementation.js"
+            as="script"
+        />
+        <link
+            rel="preload"
+            href="https://cdn.findkit.com/ui/v1.3.1/styles.css"
+            as="style"
+        />
+
+        <script type="module">
+            // https://docs.findkit.com/ui/setup
+            import {
+                FindkitUI,
+                css,
+                html,
+            } from "https://cdn.findkit.com/ui/v1.3.1/esm/index.js";
+
+            const ui = new FindkitUI({
+                publicToken: "pzbDzB9D0:eu-north-1",
+                container: ".container",
+                minTerms: 0,
+
+                // https://docs.findkit.com/ui/styling
+                css: css`
+                    .findkit--container {
+                        --findkit--brand-color: #c828d2;
+                    }
+
+                    .findkit--magnifying-glass-lightning {
+                        visibility: visible;
+                    }
+
+                    .findkit--highlight {
+                        color: #727272;
+                    }
+
+                    .logo {
+                        display: flex;
+                        align-self: center;
+                        margin-top: 1rem;
+                        margin-bottom: 1rem;
+                        width: clamp(10vw, 335px, 70vw);
+                    }
+
+                    .findkit--header p {
+                        text-align: center;
+                    }
+
+                    .description {
+                        font-style: italic;
+                        width: clamp(10vw, 60ch, 80vw);
+                        text-aling: center;
+                        align-self: center;
+                        margin: 5px;
+                    }
+
+                    .description:last-of-type {
+                        margin-bottom: 20px;
+                    }
+
+                    .description a:hover,
+                    .description a:visited {
+                        color: #0000ba;
+                    }
+
+                    .wc {
+                        height: 145px;
+                        display: block;
+                        object-fit: contain;
+                    }
+
+                    .logos {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-around;
+                        margin-top: 40px;
+                    }
+
+                    @media (max-width: 600px) {
+                        .logos {
+                            flex-direction: column;
+                            margin-bottom: 20px;
+                        }
+                        .wc {
+                            height: 100px;
+                        }
+                        .logo {
+                            height: 50px;
+                        }
+                    }
+                `,
+
+                // https://docs.findkit.com/ui/slot-overrides/
+                slots: {
+                    // https://docs.findkit.com/ui/slot-overrides/slots#header
+                    Header(props) {
+                        return html`
+                            <div class="logos">
+                                <img src="/findkit.svg" class="logo" />
+                                <img src="/wceu/wceu.png" class="wc" />
+                            </div>
+                            <p class="description">
+                                Findkit Search for WordCamp EU 2024 indexed on
+                                Thursday the 13th.
+                            </p>
+                            <p class="description">
+                                Come talk to Findkit developers in the Main Expo
+                                Hall 3.
+                            </p>
+                            ${props.children}
+                        `;
+                    },
+                },
+            });
+
+            ui.on("open", (e) => {
+                if (!ui.nextTerms) {
+                    ui.search("After party");
+                }
+                e.container.shadowRoot.querySelector("input").focus();
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="container">Loading...</div>
+    </body>
+</html>
