@@ -44,6 +44,12 @@
                 publicToken: "pzbDzB9D0:eu-north-1",
                 container: ".container",
                 minTerms: 0,
+                // params: {
+                //     semantic: {
+                //         mode: "hybrid",
+                //         k: 15,
+                //     },
+                // },
 
                 // https://docs.findkit.com/ui/styling
                 css: css`
@@ -141,8 +147,11 @@
             ui.on("open", (e) => {
                 if (!ui.nextTerms) {
                     ui.search("After party");
+                    const input =
+                        ui.container.shadowRoot.querySelector("input");
+                    input.value = "After party";
                 }
-                e.container.shadowRoot.querySelector("input").focus();
+                ui.container.shadowRoot.querySelector("input").focus();
             });
         </script>
     </head>
